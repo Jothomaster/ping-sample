@@ -28,9 +28,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: nrfconnect/sdk-sidewalk@v1
+        uses: actions/checkout@v4
         with:
+          repository: 'nrfconnect/sdk-sidewalk'
           fetch-depth: 0
+          sparce-checkout: |
+          scripts
 
       - name: Install Python dependencies
         run: |
