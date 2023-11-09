@@ -35,11 +35,11 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          find . -type f
           python3 -m pip install -r scripts/ci/requirements.txt
 
       - name: Reconfigure west
         run: |
+          find . -type f
           source /workdir/zephyr/zephyr-env.sh
           cp -r ../sdk-sidewalk /workdir/internal_sidewalk
           cd /workdir
