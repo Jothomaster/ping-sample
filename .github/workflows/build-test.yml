@@ -32,8 +32,6 @@ jobs:
         with:
           repository: 'nrfconnect/sdk-sidewalk'
           fetch-depth: 0
-          sparce-checkout: |
-            scripts
 
       - name: Install Python dependencies
         run: |
