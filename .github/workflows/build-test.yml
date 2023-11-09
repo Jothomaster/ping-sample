@@ -34,7 +34,8 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          python3 -m pip install -r scripts/ci/requirements.txt
+          find . -type -fa
+          # python3 -m pip install -r scripts/ci/requirements.txt
 
       - name: Reconfigure west
         run: |
@@ -49,6 +50,7 @@ jobs:
       - name: Twister build samples
         run: |
           source /workdir/zephyr/zephyr-env.sh
+          find . -type f
           #west build -b nrf5280dk_nrf5280
           #west build -pb nrf5340dk_nrf5340_cpuapp
 
