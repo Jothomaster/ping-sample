@@ -1,4 +1,4 @@
-# This is a basic workflow to help you get started with Actions
+0# This is a basic workflow to help you get started with Actions
 
 name: CI
 
@@ -41,7 +41,7 @@ jobs:
         run: |
           find . -type f
           source /workdir/zephyr/zephyr-env.sh
-          cp -r ../sdk-sidewalk /workdir/internal_sidewalk
+          cp -r . /workdir/internal_sidewalk
           cd /workdir
           west config manifest.path internal_sidewalk && \
           west config manifest.file internal_west.yml && \
