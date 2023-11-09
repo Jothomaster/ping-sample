@@ -28,7 +28,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: nrfconnect/sdk-sidewalk
+        uses: nrfconnect/sdk-sidewalk@v1
         with:
           fetch-depth: 0
 
