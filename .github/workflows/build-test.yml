@@ -39,7 +39,6 @@ jobs:
 
       - name: Reconfigure west
         run: |
-          find . -type f
           source /workdir/zephyr/zephyr-env.sh
           cp -r . /workdir/internal_sidewalk
           cd /workdir
@@ -51,9 +50,9 @@ jobs:
       - name: Twister build samples
         run: |
           source /workdir/zephyr/zephyr-env.sh
-          find . -type f
-          #west build -b nrf5280dk_nrf5280
-          #west build -pb nrf5340dk_nrf5340_cpuapp
+          cd ./sample
+          west build -b nrf5280dk_nrf5280
+          west build -pb nrf5340dk_nrf5340_cpuapp
 
 
     # Steps represent a sequence of tasks that will be executed as part of the job
