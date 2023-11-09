@@ -34,7 +34,7 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          find . -type -fa
+          find . -type a
           # python3 -m pip install -r scripts/ci/requirements.txt
 
       - name: Reconfigure west
