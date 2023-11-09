@@ -52,7 +52,7 @@ jobs:
           source /workdir/zephyr/zephyr-env.sh
           cd ./sample
           west build -b nrf5280dk_nrf5280
-          west build -pb nrf5340dk_nrf5340_cpuapp
+          west build -p -b nrf5340dk_nrf5340_cpuapp
 
 
     # Steps represent a sequence of tasks that will be executed as part of the job
