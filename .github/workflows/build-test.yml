@@ -1,0 +1,72 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/nrfconnect/sdk-sidewalk:main
+      options: --cpus 2
+    defaults:
+      run:
+        shell: nrfutil toolchain-manager launch --install-dir /root/ncs bash -- {0}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: 'nrfconnect/sdk-sidewalk'
+          fetch-depth: 0
+
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install -r scripts/ci/requirements.txt
+
+      - name: Reconfigure west
+        run: |
+          source /workdir/zephyr/zephyr-env.sh
+          cp -r . /workdir/internal_sidewalk
+          cd /workdir
+          west config manifest.path internal_sidewalk && \
+          west config manifest.file internal_west.yml && \
+          west update --narrow -o=--depth=1 && \
+          ln -s internal_sidewalk sidewalk
+
+      - name: Twister build samples
+        run: |
+          source /workdir/zephyr/zephyr-env.sh
+          cd ./sample
+          west build -b nrf5280dk_nrf5280
+          west build -p -b nrf5340dk_nrf5340_cpuapp
+
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+#    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+#      - uses: actions/checkout@v3
+
+      # Runs a single command using the runners shell
+#      - name: install dependencies
+#        run: |
+#          sudo apt install python3
+#          python3 -m pip install west  
+
+      # Runs a set of commands using the runners shell
+#      - name: Run a multi-line script
+#        run: |
+#          west build - b nrf52840dk_nrf52840
