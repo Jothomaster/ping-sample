@@ -32,6 +32,7 @@ jobs:
         with:
           repository: 'nrfconnect/sdk-sidewalk'
           fetch-depth: 0
+          # nice that you found out how to download sidewalk project from your own github action, but didn't you forget to download your own application ? 
 
       - name: Install Python dependencies
         run: |
@@ -53,6 +54,10 @@ jobs:
           cd ./sample
           west build -b nrf5280dk_nrf5280
           west build -p -b nrf5340dk_nrf5340_cpuapp
+
+      # Check the logs, did You build anything ? Maybe save what you build as artifacts?
+      # Were there any errors during build ? 
+      # How github action determines the step has failed?
 
 
     # Steps represent a sequence of tasks that will be executed as part of the job
