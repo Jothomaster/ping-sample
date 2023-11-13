@@ -50,8 +50,8 @@ jobs:
       - name: Twister build samples
         run: |
           source /workdir/zephyr/zephyr-env.sh
-          cd ./sample
           ls
+          cd ./sample
           west build -b nrf5280dk_nrf5280
           west build -p -b nrf5340dk_nrf5340_cpuapp
 
