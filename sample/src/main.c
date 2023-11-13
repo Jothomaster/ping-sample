@@ -3,6 +3,8 @@
 #include <zephyr/devicetree/gpio.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/device.h>
+#include <sid_api.h>
+#include <stdio.h>
 #define  MSG_SIZE 256
 #define  BTN0_NODE DT_ALIAS(sw0)
 
