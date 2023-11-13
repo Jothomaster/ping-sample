@@ -3,6 +3,8 @@
 #include <zephyr/devicetree/gpio.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/device.h>
+#include <sid_api.h>
+#include <stdio.h>
 #define  MSG_SIZE 256
 #define  BTN0_NODE DT_ALIAS(sw0)
 
@@ -45,7 +47,7 @@ void print_msg(struct k_work *item)
               LOG_DBG("%s",q->head->text);
               litem *tmp = q->head;
               q->head = q->head->next;
-              k_free(tmp);
+              k_free(tmp)
               k_msleep(200);  
         }
         //k_free(msg);
