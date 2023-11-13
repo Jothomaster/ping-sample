@@ -47,7 +47,7 @@ void print_msg(struct k_work *item)
               LOG_DBG("%s",q->head->text);
               litem *tmp = q->head;
               q->head = q->head->next;
-              k_free(tmp)
+              k_free(tmp);
               k_msleep(200);  
         }
         //k_free(msg);
