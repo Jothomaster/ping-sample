@@ -27,7 +27,7 @@ jobs:
         shell: nrfutil toolchain-manager launch --install-dir /root/ncs bash -- {0}
 
     steps:
-      - name: Checkout
+      - name: Checkout - sidewalk
         uses: actions/checkout@v4
         with:
           repository: 'nrfconnect/sdk-sidewalk'
@@ -46,6 +46,14 @@ jobs:
           west config manifest.file internal_west.yml && \
           west update --narrow -o=--depth=1 && \
           ln -s internal_sidewalk sidewalk
+
+      - name: Checkout - sample
+        uses: actions/checkout@v4
+        with:
+          repository: 'Jothomaster/ping-sample'
+          sparse-checkout: |
+            sample
+          fetch-depth: 0
 
       - name: Twister build samples
         run: |
