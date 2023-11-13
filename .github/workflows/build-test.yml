@@ -60,7 +60,7 @@ jobs:
           source /workdir/zephyr/zephyr-env.sh
           ls
           cd ./sample
-          west build -b nrf5280dk_nrf5280
+          west build -b nrf52840dk_nrf52840
           west build -p -b nrf5340dk_nrf5340_cpuapp
 
 
