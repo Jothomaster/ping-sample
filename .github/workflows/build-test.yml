@@ -55,9 +55,14 @@ jobs:
             sample
           fetch-depth: 0
 
-      - name: Twister build samples
+      - name: Build for nrf52
         run: |
           source /workdir/zephyr/zephyr-env.sh
           cd ./sample
           west build -b nrf52840dk_nrf52840
+
+      - name: Build for nrf53
+        run: |
+          source /workdir/zephyr/zephyr-env.sh
+          cd ./sample
           west build -p -b nrf5340dk_nrf5340_cpuapp
