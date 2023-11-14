@@ -1,10 +1,13 @@
+#include <stdio.h>
+
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 #include <zephyr/devicetree/gpio.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/device.h>
+
 #include <sid_api.h>
-#include <stdio.h>
+
 #define  MSG_SIZE 256
 #define  BTN0_NODE DT_ALIAS(sw0)
 
@@ -56,7 +59,7 @@ void print_msg(struct k_work *item)
 
 log_queue q;
 
-void button_pressed(const struct device *dev, struct gpio_callback *cb,
+static void button_pressed(const struct device *dev, struct gpio_callback *cb,
 		    uint32_t pins)
 {
 	for(int i=1; i<= 50; i++){
