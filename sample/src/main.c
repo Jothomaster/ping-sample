@@ -59,7 +59,7 @@ void print_msg(struct k_work *item)
 
 log_queue q;
 
-void button_pressed(const struct device *dev, struct gpio_callback *cb,
+static void button_pressed(const struct device *dev, struct gpio_callback *cb,
 		    uint32_t pins)
 {
 	for(int i=1; i<= 50; i++){
