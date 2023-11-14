@@ -6,8 +6,8 @@
 #include <zephyr/device.h>
 
 #define  BTN0_NODE DT_ALIAS(sw0)
-#define MSG_SIZE 256
-#define LOG_QUEUE_SIZE 20
+#define MSG_SIZE CONFIG_SIDEWALK_MESSAGE_SIZE
+#define LOG_QUEUE_SIZE CONFIG_SIDEWALK_MESSAGE_QUEUE_SIZE
 
 static struct gpio_dt_spec button = GPIO_DT_SPEC_GET(BTN0_NODE, gpios);
 struct gpio_callback btn_callback;

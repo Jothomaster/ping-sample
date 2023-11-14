@@ -1,0 +1,16 @@
+config SIDEWALK_MESSAGE_SIZE
+	int "Maximum length of message"
+	default 256
+	help
+	  Sets maximum length of receved message from aws.
+	  Keep in mind that you're dealing with limited memory so setting the number too high can cause to take too much space.
+
+config SIDEWALK_MESSAGE_QUEUE_SIZE
+	int "Maximum size of queue"
+	default 20
+	help
+	  Sets maximum size of queue that recieves messages.
+	  This will prevent from recieving too many messages and overloading RAM of board.
+	  Keep in mind that you're dealing with limited memory so setting the number too high can cause to take too much space.
+
+source "Kconfig.zephyr"
