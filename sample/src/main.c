@@ -1,21 +1,9 @@
 #include <stdio.h>
-<<<<<<< HEAD
-=======
-
->>>>>>> 08db262b24c674edb096b6cf79b7835004808042
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 #include <zephyr/devicetree/gpio.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/device.h>
-<<<<<<< HEAD
-=======
-
-#include <sid_api.h>
-
-#define  MSG_SIZE 256
-#define  BTN0_NODE DT_ALIAS(sw0)
->>>>>>> 08db262b24c674edb096b6cf79b7835004808042
 
 #define  BTN0_NODE DT_ALIAS(sw0)
 #define MSG_SIZE 256
