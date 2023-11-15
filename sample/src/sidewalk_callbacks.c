@@ -1,11 +1,32 @@
 #include <sid_api.h>
 #include <zephyr/logging/log.h>
+#include <zephyr/kernel.h>
+
 
 LOG_MODULE_REGISTER(callbacks, CONFIG_SIDEWALK_LOG_LEVEL);
+
+struct k_work sidewalk_event;
+
+typedef struct application_context {
+	struct sid_event_callbacks event_callbacks;
+	struct sid_config config;
+	struct sid_handle *handle;
+	bool connection_request;
+} app_ctx_t;
+
+app_ctx_t * ctx;
+
+// void sidewalk_work(struct k_work *item){
+// 	LOG_DBG("PROCESSING");
+//     sid_process(ctx->handle);
+// }
+
 
 static void on_sidewalk_event(bool in_isr, void *context)
 {
 	LOG_DBG("on event, from %s, context %p", in_isr ? "ISR" : "App", context);
+	//k_work_init(&sidewalk_event, sidewalk_work);
+   // k_work_submit_to_queue(&k_sys_work_q, &sidewalk_event);
 }
 
 static void on_sidewalk_msg_received(const struct sid_msg_desc *msg_desc, const struct sid_msg *msg, void *context)
@@ -41,6 +62,7 @@ sid_error_t sidewalk_callbacks_set(void *context, struct sid_event_callbacks *ca
 	if (!callbacks) {
 		return SID_ERROR_INVALID_ARGS;
 	}
+    ctx = context;
 	callbacks->context = context;
 	callbacks->on_event = on_sidewalk_event;
 	callbacks->on_msg_received = on_sidewalk_msg_received; /* Called from sid_process() */
