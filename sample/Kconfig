@@ -1,16 +1,14 @@
-config SIDEWALK_MESSAGE_SIZE
-	int "Maximum length of message"
-	default 256
+config SID_WORK_Q_STACK_SIZE
+	int "Sidewalk workqueue thread stack size"
+	default 8192
 	help
-	  Sets maximum length of receved message from aws.
-	  Keep in mind that you're dealing with limited memory so setting the number too high can cause to take too much space.
+	  Sets size of stack of sidewalk workqueue thread.
+	  Setting this value too low may cause stack overflow.
 
-config SIDEWALK_MESSAGE_QUEUE_SIZE
-	int "Maximum size of queue"
-	default 20
+config SID_WORK_Q_PRIORITY
+	int "Sidewalk workqueue thread priority"
+	default 2
 	help
-	  Sets maximum size of queue that recieves messages.
-	  This will prevent from recieving too many messages and overloading RAM of board.
-	  Keep in mind that you're dealing with limited memory so setting the number too high can cause to take too much space.
+	  Sets priority of sidewalk workqueue thread.
 
 source "Kconfig.zephyr"
