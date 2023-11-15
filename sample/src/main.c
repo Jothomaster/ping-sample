@@ -10,10 +10,6 @@
 #include <sidewalk_version.h>
 #include <pal_init.h>
 
-#define SID_WORK_Q_STACK_SIZE CONFIG_SID_WORK_Q_STACK_SIZE
-#define SID_WORK_Q_PRIORITY CONFIG_SID_WORK_Q_PRIORITY
-
-
 LOG_MODULE_REGISTER(main, LOG_LEVEL_DBG);
 
 typedef struct application_context {
@@ -28,7 +24,7 @@ app_ctx_t app_ctx;
 struct k_work sidewalk_event;
 
 struct k_work_q sid_q;
-K_THREAD_STACK_DEFINE(sid_work_q_stack, SID_WORK_Q_STACK_SIZE);
+K_THREAD_STACK_DEFINE(sid_work_q_stack, CONFIG_SID_WORK_Q_STACK_SIZE);
 
 void sidewalk_work(struct k_work *item){
     sid_process(app_ctx.handle);
@@ -85,7 +81,7 @@ sid_error_t sidewalk_callbacks_set(void *context, struct sid_event_callbacks *ca
 int main(void)
 {
     k_work_queue_init(&sid_q);
-    k_work_queue_start(&sid_q, sid_work_q_stack, K_THREAD_STACK_SIZEOF(sid_work_q_stack), SID_WORK_Q_PRIORITY, NULL);
+    k_work_queue_start(&sid_q, sid_work_q_stack, K_THREAD_STACK_SIZEOF(sid_work_q_stack), CONFIG_SID_WORK_Q_PRIORITY, NULL);
     k_work_init(&sidewalk_event, sidewalk_work);
     PRINT_SIDEWALK_VERSION();
     if (application_pal_init()) {
