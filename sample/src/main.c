@@ -8,11 +8,13 @@
 #include <app_ble_config.h>
 #include <app_subGHz_config.h>
 #include <sidewalk_version.h>
+
 #include <sidewalk_callbacks.h>
 #include <pal_init.h>
 
 #define SID_WORK_Q_STACK_SIZE 8192
 #define SID_WORK_Q_PRIORITY 2
+
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_DBG);
 
@@ -31,13 +33,12 @@ struct k_work_q sid_q;
 K_THREAD_STACK_DEFINE(sid_work_q_stack, SID_WORK_Q_STACK_SIZE);
 
 void sidewalk_work(struct k_work *item){
-    //LOG_DBG("PROCESSING");
     sid_process(app_ctx.handle);
+
 }
 
 static void on_sidewalk_event(bool in_isr, void *context)
 {
-	//LOG_DBG("on event, from %s, context %p", in_isr ? "ISR" : "App", context);
     k_work_submit_to_queue(&sid_q, &sidewalk_event);
 }
 
@@ -101,12 +102,14 @@ int main(void)
                 return 0;
         }
         app_ctx.config = (struct sid_config){
+
 			.link_mask = SID_LINK_TYPE_1,
 			.time_sync_periodicity_seconds = 7200,
 			.callbacks = &app_ctx.event_callbacks,
 			.link_config = app_get_ble_config(),
 			.sub_ghz_link_config = NULL,
 		};
+
         if((err = sid_init(&app_ctx.config, &app_ctx.handle)) != SID_ERROR_NONE){
                 LOG_ERR("INITIALIZATION FAILED: %d", err);
                 return 0;
@@ -116,8 +119,5 @@ int main(void)
                 return 0;
 		}
         LOG_INF("SIDEWALK STARTED %d", err);
-		/*while(1){
-			sid_process(app_ctx.handle);
-		}*/
         return 0;
 }
