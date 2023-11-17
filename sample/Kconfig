@@ -11,4 +11,10 @@ config SID_WORK_Q_PRIORITY
 	help
 	  Sets priority of sidewalk workqueue thread.
 
+config SID_MSG_BUF_SIZE
+	int "Sidewalk message buffer size"
+	default 1024
+	help
+	  Sets size of sidewalk message buffer
+
 source "Kconfig.zephyr"

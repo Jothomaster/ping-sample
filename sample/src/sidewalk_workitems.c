@@ -10,6 +10,7 @@
 #include <sidewalk_common.h>
 #include <sidewalk_callbacks.h>
 #include <sidewalk_workitems.h>
+#include <queue.h>
 
 #define CREATE_WORKITEM(NAME, ...) static void NAME##_handler(struct k_work* work) __VA_ARGS__ \
                                     K_WORK_DEFINE(NAME, NAME##_handler)
@@ -24,7 +25,7 @@ CREATE_WORKITEM(sidewalk_send_message, {
     struct sid_status status = { .state = SID_STATE_NOT_READY };
     sid_error_t err = sid_get_status(app_ctx.handle, &status);
 
-    static struct sid_msg msg;
+    //static struct sid_msg msg;
 	static struct sid_msg_desc desc;
 
 	switch (err) {
@@ -43,15 +44,18 @@ CREATE_WORKITEM(sidewalk_send_message, {
 			status.state);
 		return;
 	}    
-    char* txt = "Kopernik byla kobieta!";
-    msg = (struct sid_msg){ .data = txt, .size = strlen(txt)+1 };
+    
+    struct sid_msg* msg = queue_front(&app_ctx.message_queue);
+
+    if(msg == NULL) return;
+
 	desc = (struct sid_msg_desc){
 		.type = SID_MSG_TYPE_NOTIFY,
 		.link_type = SID_LINK_TYPE_ANY,
 		.link_mode = SID_LINK_MODE_CLOUD,
 	};
 
-    err = sid_put_msg(app_ctx.handle, &msg, &desc);
+    err = sid_put_msg(app_ctx.handle, msg, &desc);
 	switch (err) {
 	case SID_ERROR_NONE: {
 		//application_state_sending(&global_state_notifier, true);
@@ -65,10 +69,14 @@ CREATE_WORKITEM(sidewalk_send_message, {
 	default:
 		LOG_ERR("Unknown error returned from sid_put_msg() -> %d", err);
 	}
+
+    queue_pop(&app_ctx.message_queue);
+    k_work_submit_to_queue(&sid_q, &sidewalk_send_message);
 });
 
 CREATE_WORKITEM(sidewalk_start, {
     PRINT_SIDEWALK_VERSION();
+    app_ctx.registered = 0;
     if (application_pal_init()) {
         LOG_ERR("Failed to initialze PAL layer for sidewalk applicaiton.");
         return;
@@ -86,7 +94,12 @@ CREATE_WORKITEM(sidewalk_start, {
         .link_config = app_get_ble_config(),
         .sub_ghz_link_config = NULL,
     };
-
+    queue_init(&app_ctx.message_queue);
+    struct sid_msg msg = (struct sid_msg){
+        .data = "Hello World!",
+        .size = 12,
+    };
+    queue_push(&msg, &app_ctx.message_queue);
     if((err = sid_init(&app_ctx.config, &app_ctx.handle)) != SID_ERROR_NONE){
         LOG_ERR("INITIALIZATION FAILED: %d", err);
         return;
@@ -125,6 +138,7 @@ CREATE_WORKITEM(sidewalk_conn_request, {
 });
 
 void sidewalk_workqueue_init(void){
+
     k_work_queue_init(&sid_q);
     k_work_queue_start(&sid_q, sid_work_q_stack, K_THREAD_STACK_SIZEOF(sid_work_q_stack), CONFIG_SID_WORK_Q_PRIORITY, NULL);
     k_work_submit_to_queue(&sid_q, &sidewalk_start);

@@ -11,4 +11,5 @@ target_sources(app PRIVATE
     src/sidewalk_callbacks.c
     src/sidewalk_workitems.c
     src/sidewalk_globals.c
+    src/queue.c
 )
