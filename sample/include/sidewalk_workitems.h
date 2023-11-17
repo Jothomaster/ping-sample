@@ -3,7 +3,7 @@
 
 #include <zephyr/kernel.h>
 
-extern struct k_work sidewalk_event;
+extern struct k_work sidewalk_event, sidewalk_start, sidewalk_conn_request, sidewalk_send_message;
 
 void sidewalk_workqueue_init();
 

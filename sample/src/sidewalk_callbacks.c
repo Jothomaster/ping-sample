@@ -18,6 +18,7 @@ static void on_sidewalk_msg_received(const struct sid_msg_desc *msg_desc, const 
     LOG_DBG("received message(type: %d, link_mode: %d, id: %u size %u)", 
     (int)msg_desc->type, (int)msg_desc->link_mode, msg_desc->id, msg->size);
     LOG_HEXDUMP_INF((uint8_t *)msg->data, msg->size, "Message data: ");
+    k_work_submit_to_queue(&sid_q, &sidewalk_conn_request);
 }
 
 static void on_sidewalk_msg_sent(const struct sid_msg_desc *msg_desc, void *context)
@@ -28,11 +29,22 @@ static void on_sidewalk_msg_sent(const struct sid_msg_desc *msg_desc, void *cont
 static void on_sidewalk_send_error(sid_error_t error, const struct sid_msg_desc *msg_desc, void *context)
 {
 	LOG_DBG("on send error");
+    k_work_submit_to_queue(&sid_q, &sidewalk_conn_request);
 }
 
 static void on_sidewalk_status_changed(const struct sid_status *status, void *context)
 {
 	LOG_DBG("on status changed: %d", status->state);
+    switch(status->state){
+        case 0:
+            k_work_submit_to_queue(&sid_q, &sidewalk_send_message);
+            break;
+        case 1:
+            //k_work_submit_to_queue(&sid_q, &sidewalk_conn_request);
+            break;
+        default:
+            break;
+    }
 }
 
 static void on_sidewalk_factory_reset(void *context)
