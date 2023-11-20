@@ -3,14 +3,11 @@
 
 #include <sid_api.h>
 
-#define MSG_SIZE 256
-#define LOG_QUEUE_SIZE 20
-
 typedef struct{
-        struct sid_msg queue_array[LOG_QUEUE_SIZE];
+        struct sid_msg queue_array[CONFIG_LOG_QUEUE_SIZE];
         int head, tail;
         int size;
-        uint8_t msg_buffer[LOG_QUEUE_SIZE][MSG_SIZE];
+        uint8_t msg_buffer[CONFIG_LOG_QUEUE_SIZE][CONFIG_MSG_SIZE];
 } queue;
 
 void queue_init(queue* q);

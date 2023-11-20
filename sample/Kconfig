@@ -7,7 +7,7 @@ config SID_WORK_Q_STACK_SIZE
 
 config SID_WORK_Q_PRIORITY
 	int "Sidewalk workqueue thread priority"
-	default 2
+	default 15
 	help
 	  Sets priority of sidewalk workqueue thread.
 
@@ -16,5 +16,17 @@ config SID_MSG_BUF_SIZE
 	default 1024
 	help
 	  Sets size of sidewalk message buffer
+
+config LOG_QUEUE_SIZE
+	int "Size of message queue"
+	default 20
+	help
+		Sets size of maximum messages loig queue can hold at the same time
+
+config MSG_SIZE
+	int "Length of the message"
+	default 256
+	help
+		Set maximum length of message log queue can hold
 
 source "Kconfig.zephyr"

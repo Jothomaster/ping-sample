@@ -21,12 +21,15 @@ CREATE_WORKITEM(sidewalk_event, {
     sid_process(app_ctx.handle);
 });
 
-CREATE_WORKITEM(sidewalk_send_message, {
+CREATE_WORKITEM(sidewalk_process_event, {
+    LOG_WRN("process evenmt");
     struct sid_status status = { .state = SID_STATE_NOT_READY };
     sid_error_t err = sid_get_status(app_ctx.handle, &status);
+    LOG_WRN("logi istnieja");
 
-    //static struct sid_msg msg;
-	static struct sid_msg_desc desc;
+    if(app_ctx.message_queue.size == 0) return;
+
+    LOG_WRN("logi istnieja");
 
 	switch (err) {
 	case SID_ERROR_NONE:
@@ -39,44 +42,79 @@ CREATE_WORKITEM(sidewalk_send_message, {
 		return;
 	}
 
+    LOG_WRN("logi istnieja");
+
 	if (status.state != SID_STATE_READY && status.state != SID_STATE_SECURE_CHANNEL_READY) {
-		LOG_ERR("Sidewalk Status is invalid!, expected SID_STATE_READY or SID_STATE_SECURE_CHANNEL_READY, got %d",
-			status.state);
+        LOG_WRN("logi istnieja");
+		k_work_submit_to_queue(&sid_q, &sidewalk_conn_request);
 		return;
-	}    
-    
+	}
+    LOG_WRN("logi istnieja");
+    k_work_submit_to_queue(&sid_q, &sidewalk_send_message);
+});
+
+CREATE_WORKITEM(sidewalk_send_message, {
+	static struct sid_msg_desc desc;
+
     struct sid_msg* msg = queue_front(&app_ctx.message_queue);
 
     if(msg == NULL) return;
-
+    
 	desc = (struct sid_msg_desc){
 		.type = SID_MSG_TYPE_NOTIFY,
 		.link_type = SID_LINK_TYPE_ANY,
 		.link_mode = SID_LINK_MODE_CLOUD,
 	};
 
-    err = sid_put_msg(app_ctx.handle, msg, &desc);
+    sid_error_t err = sid_put_msg(app_ctx.handle, msg, &desc);
 	switch (err) {
 	case SID_ERROR_NONE: {
-		//application_state_sending(&global_state_notifier, true);
 		LOG_INF("queued data message id:%d", desc.id);
 		break;
 	}
 	case SID_ERROR_TRY_AGAIN: {
 		LOG_ERR("there is no space in the transmit queue, Try again.");
-		break;
+        k_work_submit_to_queue(&sid_q, &sidewalk_send_message);
+		return;
 	}
 	default:
 		LOG_ERR("Unknown error returned from sid_put_msg() -> %d", err);
+        k_work_submit_to_queue(&sid_q, &sidewalk_send_message);
+        return;
 	}
 
     queue_pop(&app_ctx.message_queue);
     k_work_submit_to_queue(&sid_q, &sidewalk_send_message);
 });
 
+CREATE_WORKITEM(sidewalk_conn_request, {
+    struct sid_status status = { .state = SID_STATE_NOT_READY };
+    sid_error_t err = sid_get_status(app_ctx.handle, &status);
+
+    switch(err) {
+        case SID_ERROR_NONE:
+            break;
+        case SID_ERROR_INVALID_ARGS:
+            LOG_ERR("ERROR_VALUE = %d; LINE: %d", err, __LINE__);
+            return;
+        default:
+            LOG_ERR("ERROR_VALUE = %d; LINE: %d", err, __LINE__);
+            return;
+    }
+
+	if (status.state != SID_STATE_READY && status.state != SID_STATE_SECURE_CHANNEL_READY) { 
+		err = sid_ble_bcn_connection_request(app_ctx.handle, true);
+    }
+
+    if(err != SID_ERROR_NONE) {
+        LOG_ERR("ERROR_VALUE = %d; LINE: %d", err, __LINE__);
+    }
+});
+
+
 CREATE_WORKITEM(sidewalk_start, {
     PRINT_SIDEWALK_VERSION();
-    app_ctx.registered = 0;
+    app_ctx.is_init = false;
     if (application_pal_init()) {
         LOG_ERR("Failed to initialze PAL layer for sidewalk applicaiton.");
         return;
@@ -109,33 +147,9 @@ CREATE_WORKITEM(sidewalk_start, {
         return;
     }
     LOG_INF("SIDEWALK STARTED %d", err);
-    //k_work_submit_to_queue(&sid_q, &sidewalk_conn_request);
 });
 
-CREATE_WORKITEM(sidewalk_conn_request, {
-    struct sid_status status = { .state = SID_STATE_NOT_READY };
-    sid_error_t err = sid_get_status(app_ctx.handle, &status);
-
-    switch(err) {
-        case SID_ERROR_NONE:
-            break;
-        case SID_ERROR_INVALID_ARGS:
-            LOG_ERR("ERROR_VALUE = %d; LINE: %d", err, __LINE__);
-            return;
-        default:
-            LOG_ERR("ERROR_VALUE = %d; LINE: %d", err, __LINE__);
-            return;
-    }
-
-	if (status.state != SID_STATE_READY && status.state != SID_STATE_SECURE_CHANNEL_READY) { 
-		err = sid_ble_bcn_connection_request(app_ctx.handle, true);
-        LOG_WRN("Satus state is invalid: %d", status.state);
-	}
-
-    if(err != SID_ERROR_NONE) {
-        LOG_ERR("ERROR_VALUE = %d; LINE: %d", err, __LINE__);
-    }
-});
+K_THREAD_STACK_DEFINE(sid_work_q_stack, CONFIG_SID_WORK_Q_STACK_SIZE);
 
 void sidewalk_workqueue_init(void){
 

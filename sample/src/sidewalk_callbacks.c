@@ -20,7 +20,7 @@ static void on_sidewalk_msg_received(const struct sid_msg_desc *msg_desc, const 
     (int)msg_desc->type, (int)msg_desc->link_mode, msg_desc->id, msg->size);
     LOG_HEXDUMP_INF((uint8_t *)msg->data, msg->size, "Message data: ");
     queue_push(msg, &app_ctx.message_queue);
-    k_work_submit_to_queue(&sid_q, &sidewalk_conn_request);
+    k_work_submit_to_queue(&sid_q, &sidewalk_process_event);
 }
 
 static void on_sidewalk_msg_sent(const struct sid_msg_desc *msg_desc, void *context)
@@ -31,27 +31,18 @@ static void on_sidewalk_msg_sent(const struct sid_msg_desc *msg_desc, void *cont
 static void on_sidewalk_send_error(sid_error_t error, const struct sid_msg_desc *msg_desc, void *context)
 {
 	LOG_DBG("on send error");
-    k_work_submit_to_queue(&sid_q, &sidewalk_conn_request);
 }
 
 static void on_sidewalk_status_changed(const struct sid_status *status, void *context)
 {
-
 	LOG_DBG("on status changed: %d", status->state);
-    LOG_DBG("Register status: %d", status->detail.time_sync_status);
-    switch(status->state){
-        case 0:
-            if(app_ctx.registered++) k_work_submit_to_queue(&sid_q, &sidewalk_send_message);
-            break;
-        case 1:
-            if(app_ctx.registered == 1) {
-                k_work_submit_to_queue(&sid_q, &sidewalk_conn_request);
-                app_ctx.registered++;
-            }
-            break;
-        default:
-            break;
+    if(status->state == 0 && !app_ctx.is_init){
+        app_ctx.is_init = true;
+        sid_ble_bcn_connection_request(app_ctx.handle, false);
+        return;
     }
+    if(!app_ctx.is_init) { return; }
+    k_work_submit_to_queue(&sid_q, &sidewalk_process_event);
 }
 
 static void on_sidewalk_factory_reset(void *context)

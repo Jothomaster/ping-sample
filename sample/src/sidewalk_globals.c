@@ -5,5 +5,3 @@
 app_ctx_t app_ctx;
 
 struct k_work_q sid_q;
-
-K_THREAD_STACK_DEFINE(sid_work_q_stack, CONFIG_SID_WORK_Q_STACK_SIZE);
