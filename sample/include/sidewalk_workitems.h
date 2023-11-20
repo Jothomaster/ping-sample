@@ -3,8 +3,8 @@
 
 #include <zephyr/kernel.h>
 
-extern struct k_work sidewalk_event, sidewalk_start, sidewalk_conn_request, sidewalk_send_message, sidewalk_process_event;
+#include <main.h>
 
-void sidewalk_workqueue_init();
+void sidewalk_workqueue_init(app_ctx_t* context);
 
 #endif /* SIDEWALK_WORKITEMS_H */

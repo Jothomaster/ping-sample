@@ -7,15 +7,9 @@ config SID_WORK_Q_STACK_SIZE
 
 config SID_WORK_Q_PRIORITY
 	int "Sidewalk workqueue thread priority"
-	default 15
+	default 14
 	help
 	  Sets priority of sidewalk workqueue thread.
-
-config SID_MSG_BUF_SIZE
-	int "Sidewalk message buffer size"
-	default 1024
-	help
-	  Sets size of sidewalk message buffer
 
 config LOG_QUEUE_SIZE
 	int "Size of message queue"

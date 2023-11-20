@@ -10,6 +10,5 @@ target_sources(app PRIVATE
     src/main.c
     src/sidewalk_callbacks.c
     src/sidewalk_workitems.c
-    src/sidewalk_globals.c
     src/queue.c
 )
