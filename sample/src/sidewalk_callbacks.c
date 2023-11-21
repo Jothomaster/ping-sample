@@ -12,7 +12,7 @@ LOG_MODULE_REGISTER(sid_callbacks, LOG_LEVEL_DBG);
 static void on_sidewalk_event(bool in_isr, void *context)
 {
 	app_ctx_t* app_ctx = (app_ctx_t*) context;
-    k_work_submit_to_queue(&app_ctx->sid_q, app_ctx->sidewalk_event);
+    k_work_submit_to_queue(&app_ctx->sid_q, &app_ctx->sidewalk_event);
 }
 
 static void on_sidewalk_msg_received(const struct sid_msg_desc *msg_desc, const struct sid_msg *msg, void *context)
@@ -22,7 +22,7 @@ static void on_sidewalk_msg_received(const struct sid_msg_desc *msg_desc, const 
     (int)msg_desc->type, (int)msg_desc->link_mode, msg_desc->id, msg->size);
     LOG_HEXDUMP_INF((uint8_t *)msg->data, msg->size, "Message data: ");
     queue_push(msg, &app_ctx->message_queue);
-    k_work_submit_to_queue(&app_ctx->sid_q, app_ctx->sidewalk_process_event);
+    k_work_submit_to_queue(&app_ctx->sid_q, &app_ctx->sidewalk_process_event);
 }
 
 static void on_sidewalk_msg_sent(const struct sid_msg_desc *msg_desc, void *context)
@@ -45,7 +45,7 @@ static void on_sidewalk_status_changed(const struct sid_status *status, void *co
         return;
     }
     if(!app_ctx->is_init) { return; }
-    k_work_submit_to_queue(&app_ctx->sid_q, app_ctx->sidewalk_process_event);
+    k_work_submit_to_queue(&app_ctx->sid_q, &app_ctx->sidewalk_process_event);
 }
 
 static void on_sidewalk_factory_reset(void *context)
