@@ -25,7 +25,6 @@ CREATE_WORKITEM(sidewalk_event, {
 });
 
 CREATE_WORKITEM(sidewalk_process_event, {
-    LOG_WRN("process event");
     app_ctx_t *app_ctx = CONTAINER_OF(work, app_ctx_t, sidewalk_process_event);
 
     struct sid_status status = { .state = SID_STATE_NOT_READY };

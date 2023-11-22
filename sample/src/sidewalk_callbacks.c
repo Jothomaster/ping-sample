@@ -22,6 +22,7 @@ static void on_sidewalk_msg_received(const struct sid_msg_desc *msg_desc, const 
     (int)msg_desc->type, (int)msg_desc->link_mode, msg_desc->id, msg->size);
     LOG_HEXDUMP_INF((uint8_t *)msg->data, msg->size, "Message data: ");
     queue_push(msg, &app_ctx->message_queue);
+	
     k_work_submit_to_queue(&app_ctx->sid_q, &app_ctx->sidewalk_process_event);
 }
 
