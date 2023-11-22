@@ -198,11 +198,11 @@ To start Sidewalk, do the following:
         ```
     * `<sequence_number>` is an integer and should be different for each subsequent request.
         
-        > [!NOTE]
-        >
-        > Ensure to increase 'Seq' number on every message. The device will not receive a message with lower or equal sequence number.
-        >
-        > 'Seq' must be higher than 1
+> [!NOTE]
+>
+> Ensure to increase 'Seq' number on every message. The device will not receive a message with lower or equal sequence number.
+>
+> 'Seq' must be higher than 1
 
     Once you have populated the command with data, it should look similar to the following:
 
