@@ -13,13 +13,12 @@ The sample supports the following development kits:
 
 ## Overview
 
-The sample sends the message to aws it recieves with use of Bluetooth LE. The sample also sends a message to aws when it connects for the first time.
+The sample sends the message to AWS MQTT it recieves with use of Bluetooth LE. The sample also sends a message to AWS MQTT when it connects for the first time.
 
 ---
 
 ## Building and running
 
-## Sample process
 
 Sample can be found in the directory where this file first was.
 
@@ -31,7 +30,7 @@ Sample can be found in the directory where this file first was.
 > 
 > This step needs to be completed only once. You do not have to repeat it on every sample rebuild.
 
-To build the sample, follow the steps in the [Building and programming an application](#) documentation. 
+To build the sample, follow the steps in the [Building and programming an application](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.5.0/nrf/getting_started/programming.html#gs-programming) documentation. 
 
 This application can be built as follows:
 
@@ -46,6 +45,10 @@ Example:
 ```
 west build -b nrf52840dk_nrf52840
 ```
+
+### Sample process
+
+The sample works as follows:
 
 ```mermaid
 flowchart TD
@@ -74,3 +77,9 @@ flowchart TD
     Mq_e2 -->|No| IL
     end
 ```
+
+### Testing
+
+### Starting Sidewalk
+
+### Receiving and sen
