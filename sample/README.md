@@ -52,27 +52,27 @@ The sample works as follows:
 
 ```mermaid
 flowchart TD
-    St(Start)
-    St --> Ma[Main]
-    subgraph Ma_t [main_thread]
+    St("Start")
+    St --> Ma["Main"]
+    subgraph Ma_t ["main_thread"]
     Ma
     end
-    Ma --> Sid_s[sidewalk_start]
-    subgraph Sid_t [sid_q_thread]
-    Sid_s -->| queue_init#40;#41; | IL[IDLE]
-    IL -.->|sidewalk_event| Sid_e{what sidewalk_event?}
+    Ma --> Sid_s["sidewalk_start"]
+    subgraph Sid_t ["sid_q_thread"]
+    Sid_s -->| queue_init#40;#41; | IL["IDLE"]
+    IL -.->|sidewalk_event| Sid_e{"what sidewalk_event?"}
     Sid_e -->|on_status_changed| Sid_pr
-    Sid_e -->|on_message_recieved| Q_ph[queue_push#40;msg#41;]
-    Q_ph --> Sid_pr[sidewalk_process_event]
-    Sid_pr --> Mq_e1{are there messeges on queue?}
+    Sid_e -->|on_message_recieved| Q_ph["queue_push#40;msg#41;"]
+    Q_ph --> Sid_pr["sidewalk_process_event"]
+    Sid_pr --> Mq_e1{"are there messeges on queue?"}
     Mq_e1 -->|No| IL
-    Conn{is there a connection?} & Sid_conn[sidewalk_connection_request]
+    Conn{"is there a connection?"} & Sid_conn["sidewalk_connection_request"]
     Mq_e1 -->|Yes| Conn
     Conn -->|No| Sid_conn
     Sid_conn --> IL
-    Conn -->|Yes| Sid_send[sidewalk_send_message]
-    Sid_send --> Q_pp[queue_pop#40;#41;]
-    Q_pp --> Mq_e2{are there messeges on queue?}
+    Conn -->|Yes| Sid_send["sidewalk_send_message"]
+    Sid_send --> Q_pp["queue_pop()"]
+    Q_pp --> Mq_e2{"are there messeges on queue?"}
     Mq_e2 -->|Yes| Sid_send
     Mq_e2 -->|No| IL
     end
