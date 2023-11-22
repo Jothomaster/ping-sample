@@ -1,6 +1,6 @@
 # Ping Bluetooth LE
 
-## Reqirements
+## Requirements
 
 The sample supports the following development kits:
 
