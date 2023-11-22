@@ -1,1 +1,1 @@
-# ping-sample
+# Ping Bluetooth LE
