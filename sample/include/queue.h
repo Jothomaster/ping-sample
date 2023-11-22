@@ -4,10 +4,15 @@
 #include <sid_api.h>
 
 typedef struct{
-        struct sid_msg queue_array[CONFIG_LOG_QUEUE_SIZE];
-        int head, tail;
+        struct sid_msg message;
+        uint8_t msg_data[CONFIG_MSG_SIZE];
+        sys_snode_t l_item;
+}queue_item;
+
+typedef struct{
+        queue_item queue_buffer[CONFIG_LOG_QUEUE_SIZE];
+        sys_slist_t queue_list;
         int size;
-        uint8_t msg_buffer[CONFIG_LOG_QUEUE_SIZE][CONFIG_MSG_SIZE];
 } queue;
 
 void queue_init(queue* q);
