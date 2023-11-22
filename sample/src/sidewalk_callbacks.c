@@ -33,7 +33,9 @@ static void on_sidewalk_msg_sent(const struct sid_msg_desc *msg_desc, void *cont
 
 static void on_sidewalk_send_error(sid_error_t error, const struct sid_msg_desc *msg_desc, void *context)
 {
+	app_ctx_t* app_ctx = (app_ctx_t*) context;
 	LOG_DBG("on send error");
+	k_work_submit_to_queue(&app_ctx->sid_q, &app_ctx->sidewalk_process_event);
 }
 
 static void on_sidewalk_status_changed(const struct sid_status *status, void *context)
