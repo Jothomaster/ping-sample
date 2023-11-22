@@ -78,7 +78,7 @@ flowchart TD
     end
 ```
 
-> [!INFO]
+> [!NOTE]
 >
 > Before testing or running the sample make sure you're subscribed to the correct topic
 > ![subscribe](docsSrc/subscribe.png)
@@ -226,9 +226,9 @@ To start Sidewalk, do the following:
         
         > [!NOTE]
         >
-        > Ensure to increase ‘Seq’ number on every message. The device will not receive a message with lower or equal sequence number.
+        > Ensure to increase 'Seq' number on every message. The device will not receive a message with lower or equal sequence number.
         >
-        > ‘Seq‘ must be higher than 1
+        > 'Seq' must be higher than 1
 
     Once you have populated the command with data, it should look similar to the following:
 
