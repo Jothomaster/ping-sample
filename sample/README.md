@@ -205,7 +205,7 @@ To start Sidewalk, do the following:
     ```
     * `<wireless_device_id>` is the Wireless Device ID of your Sidewalk Device.
         
-        You can find it in the WirelessDevice.json file, generated with the Nordic_MFG.hex file during [Setting up your Sidewalk product]().
+        You can find it in the WirelessDevice.json file, generated with the Nordic_MFG.hex file during [Setting up your Sidewalk product](https://nrfconnect.github.io/sdk-sidewalk/setting_up_sidewalk_environment/setting_up_sidewalk_product.html#setting-up-sidewalk-product).
 
         You can also find your Wireless Device ID in the message sent form the device to AWS.
 
