@@ -3,6 +3,7 @@
 
 #include <sid_api.h>
 
-sid_error_t sidewalk_callbacks_set(void *context, struct sid_event_callbacks *callbacks);
+sid_error_t sidewalk_callbacks_set(void* context,
+                                   struct sid_event_callbacks* callbacks);
 
 #endif /* SIDEWALK_CALLBACKS_H */
